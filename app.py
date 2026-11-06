@@ -22,9 +22,11 @@ BASE = DATA / 'Pericia_5090332'
 STATE = DATA / 'state.json'
 PASSWORD = os.environ.get('APP_PASSWORD', '')
 SECRET = os.environ.get('SECRET_KEY', '')
-if len(PASSWORD) < 16 or len(SECRET) < 32:
-    raise RuntimeError('Configure APP_PASSWORD com 16 caracteres ou mais e SECRET_KEY com 32 ou mais.')
-PASSWORD_HASH = generate_password_hash(PASSWORD)
+PASSWORD_HASH = os.environ.get('APP_PASSWORD_HASH', '')
+if (not PASSWORD_HASH and len(PASSWORD) < 16) or len(SECRET) < 32:
+    raise RuntimeError('Configure APP_PASSWORD com 16 caracteres ou mais (ou APP_PASSWORD_HASH) e SECRET_KEY com 32 ou mais.')
+if not PASSWORD_HASH:
+    PASSWORD_HASH = generate_password_hash(PASSWORD)
 app = Flask(__name__, static_folder=None)
 app.config.update(SECRET_KEY=SECRET, MAX_CONTENT_LENGTH=100 * 1024 * 1024,
                   SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',

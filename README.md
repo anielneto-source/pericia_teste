@@ -2,17 +2,21 @@
 
 Interface web com plano de trabalho, biblioteca de documentos, pastas, quesitos, diário e relatório para impressão/PDF. O código fica neste repositório; os documentos e os dados do caso ficam em um volume privado no servidor, fora do Git.
 
-## Publicar
+## Publicar gratuitamente
 
-[Abrir configuração de publicação no Render](https://render.com/deploy?repo=https%3A%2F%2Fgithub.com%2Fanielneto-source%2Fpericia_teste)
+A opção principal é o **PythonAnywhere Beginner/Free**, com armazenamento em disco e uma aplicação Python. A versão gratuita oferece 512 MiB de espaço e exige renovar a validade da aplicação pelo painel a cada mês. Consulte os limites atuais do serviço antes de usar.
 
-O arquivo `render.yaml` configura uma aplicação Docker no Render com disco persistente de 1 GB. O serviço e o disco usam recursos pagos: confira os valores apresentados pelo Render antes de criar a infraestrutura. Não use armazenamento temporário para os documentos e o acompanhamento.
+**[Abrir o guia completo de publicação gratuita](GUIA_GRATUITO.md)** · [Criar conta gratuita](https://www.pythonanywhere.com/pricing/)
 
-1. No Render, conecte sua conta GitHub e crie um **Blueprint** a partir deste repositório.
-2. Defina `APP_PASSWORD` com uma senha exclusiva de pelo menos 16 caracteres. `SECRET_KEY` é gerada automaticamente.
-3. Confira plano/custos e execute a publicação.
-4. Abra a URL HTTPS informada pelo Render, entre com sua senha e importe o arquivo `Pacote_privado_pericia.zip`, gerado localmente por `exportar_pacote_online.py`.
-5. Acesse o mesmo link em outros dispositivos. Os dados são gravados no servidor. O botão **Backup completo** exporta o acompanhamento e todos os arquivos.
+Após criar a conta, no console Bash do serviço:
+
+```bash
+git clone --depth 1 https://github.com/anielneto-source/pericia_teste.git ~/pericia_teste
+cd ~/pericia_teste
+python3.13 deploy/pythonanywhere_setup.py
+```
+
+O instalador pede a senha do sistema sem mostrá-la, guarda somente o hash em configuração privada e informa os caminhos para concluir a configuração WSGI no painel Web. Use a mesma versão de Python no instalador e na aplicação Web. Abra a URL HTTPS atribuída pelo serviço e importe o pacote privado pela tela autenticada.
 
 Não envie o ZIP, PDFs, `.env`, notas ou backups para o repositório público. O pacote inicial é enviado somente pela tela autenticada, por HTTPS. A importação inicial não sobrescreve dados existentes. Guarde uma cópia do backup completo fora da hospedagem.
 
@@ -20,7 +24,11 @@ Não envie o ZIP, PDFs, `.env`, notas ou backups para o repositório público. O
 
 Todas as páginas, PDFs, textos, APIs e backups exigem autenticação. `/healthz` informa somente a disponibilidade. A sessão dura até oito horas; os cookies são HttpOnly, SameSite e Secure em produção. Alterações exigem token CSRF, e tentativas de senha têm limite de frequência. Use uma senha forte e HTTPS. Esta versão possui uma conta compartilhada do proprietário; não oferece cadastro de múltiplos usuários ou controle individual de permissões.
 
-Um único processo Gunicorn usa oito threads e uma trava para gravação do estado. Mantenha `--workers 1` e uma única instância; não aumente réplicas sem migrar o armazenamento para banco de dados transacional. O disco persistente mantém os dados entre publicações. O último salvamento de um mesmo campo prevalece entre edições simultâneas.
+No PythonAnywhere, mantenha uma aplicação com um worker, conforme o plano gratuito. O aplicativo usa uma trava para gravação do estado em um único processo; não aumente réplicas sem migrar o armazenamento para banco de dados transacional. Os documentos ficam fora da pasta do código. O último salvamento de um mesmo campo prevalece entre edições simultâneas.
+
+## Alternativa paga opcional
+
+O Dockerfile e `deploy/render-opcional.yaml` preservam a opção de hospedagem no Render com serviço e disco pagos. Não são necessários para o PythonAnywhere. Nenhum plano pago é contratado pelo instalador gratuito.
 
 ## Executar localmente para desenvolvimento
 
