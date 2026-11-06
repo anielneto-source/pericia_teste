@@ -1,0 +1,14 @@
+{
+  "origem": "Planilha_Consolidada_Drenagem_COM_RUAS.xlsx",
+  "aba": "Resultados",
+  "coluna_tipo": "nombre_falla",
+  "coordenadas": "longitud / latitud; interpretadas como longitude/latitude WGS84, sem reprojeção",
+  "registros_exportados": 18796,
+  "por_tipo": {
+    "Boca de Lobo": 6486,
+    "Tampa de Bueiro": 12310
+  },
+  "excluidos": [],
+  "coordenadas_repetidas": 2016,
+  "nota": "Registros coincidentes preservados; caracteres de substituição já existentes na planilha são preservados."
+}
