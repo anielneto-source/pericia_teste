@@ -1,0 +1,16 @@
+import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const require=createRequire(process.env.PERICIA_NODE_MODULES?path.join(process.env.PERICIA_NODE_MODULES,'../package.json'):path.join(root,'package.json'));
+const {build}=require('esbuild');
+const output=path.join(root,'docs');await mkdir(output,{recursive:true});
+for(const name of ['app.js','style.css','report.css'])await copyFile(path.join(root,'public',name),path.join(output,name));
+let html=await readFile(path.join(root,'public/index.html'),'utf8');
+html=html.replace('<script src="cloud.js"></script><script src="app.js"></script>','<script src="pages.js" defer></script>');
+html=html.replace('<body>','<body><section id="access-gate"><h1>Perícia · Acesso privado</h1><p>Carregando conexão…</p><noscript>Ative o JavaScript para acessar o sistema.</noscript></section>');
+html=html.replace('</head>','<link rel="stylesheet" href="access.css"><meta name="referrer" content="same-origin"><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; connect-src \'self\' https://*.supabase.co wss://*.supabase.co; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' blob: data:; object-src blob:; base-uri \'self\'; form-action \'self\'"></head>');
+await writeFile(path.join(output,'index.html'),html);
+await build({entryPoints:[path.join(root,'deploy/pages-entry.js')],outfile:path.join(output,'pages.js'),bundle:true,minify:true,platform:'browser',target:['es2022'],legalComments:'linked',nodePaths:process.env.PERICIA_NODE_MODULES?[process.env.PERICIA_NODE_MODULES]:undefined});
+console.log('GitHub Pages preparado em docs/. Nenhum documento privado foi copiado.');

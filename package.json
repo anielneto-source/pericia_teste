@@ -1,0 +1,12 @@
+{
+  "name": "pericia-pages",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {"build:pages": "node deploy/build-pages.mjs", "test:pages-sql": "node tests/pages-sql.cjs"},
+  "devDependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "@electric-sql/pglite": "0.5.15",
+    "esbuild": "0.28.2",
+    "fflate": "0.8.3"
+  }
+}

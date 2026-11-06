@@ -2,7 +2,17 @@
 
 Interface web com plano de trabalho, biblioteca de documentos, pastas, quesitos, diário e relatório para impressão/PDF. O código fica neste repositório; os documentos e os dados do caso ficam em um volume privado no servidor, fora do Git.
 
-## Publicar gratuitamente
+## Endereço no GitHub Pages
+
+Interface: **https://anielneto-source.github.io/pericia_teste/**.
+
+Esta opção usa GitHub Pages para a interface e **Supabase Free** para login, documentos privados e sincronização. Os PDFs não são enviados ao GitHub. **[Guia de ativação do login e armazenamento](GUIA_GITHUB_PAGES.md)**.
+
+O site pode ser publicado antes da conexão do projeto Supabase; nesse caso, ele mostra a tela de configuração. O acesso aos documentos só fica disponível depois de configurar o serviço privado e importar o pacote autenticado.
+
+Para reconstruir os arquivos estáticos, execute `npm ci` e `npm run build:pages`. Para validar as transações e o isolamento de usuários: `npm run test:pages-sql`.
+
+## Alternativa gratuita com servidor Python
 
 A opção principal é o **PythonAnywhere Beginner/Free**, com armazenamento em disco e uma aplicação Python. A versão gratuita oferece 512 MiB de espaço e exige renovar a validade da aplicação pelo painel a cada mês. Consulte os limites atuais do serviço antes de usar.
 
