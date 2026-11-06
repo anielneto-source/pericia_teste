@@ -1,4 +1,4 @@
-import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,copyFile,mkdir,readdir} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -13,4 +13,13 @@ html=html.replace('<body>','<body><section id="access-gate"><h1>Perícia · Aces
 html=html.replace('</head>','<link rel="stylesheet" href="access.css"><meta name="referrer" content="same-origin"><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; connect-src \'self\' https://*.supabase.co wss://*.supabase.co; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' blob: data:; object-src blob:; base-uri \'self\'; form-action \'self\'"></head>');
 await writeFile(path.join(output,'index.html'),html);
 await build({entryPoints:[path.join(root,'deploy/pages-entry.js')],outfile:path.join(output,'pages.js'),bundle:true,minify:true,platform:'browser',target:['es2022'],legalComments:'linked',nodePaths:process.env.PERICIA_NODE_MODULES?[process.env.PERICIA_NODE_MODULES]:undefined});
+const modules=process.env.PERICIA_NODE_MODULES||path.join(root,'node_modules');
+const libraries=['fflate','iceberg-js',...(await readdir(path.join(modules,'@supabase'))).map(name=>'@supabase/'+name)];
+const licenses=[];
+for(const library of libraries){
+ for(const filename of ['LICENSE','LICENSE.md','LICENSE.txt']){
+  try{licenses.push(library+'\n'+await readFile(path.join(modules,library,filename),'utf8'));break;}catch{}
+ }
+}
+await writeFile(path.join(output,'THIRD_PARTY_LICENSES.txt'),licenses.join('\n\n----------------------------------------\n\n'));
 console.log('GitHub Pages preparado em docs/. Nenhum documento privado foi copiado.');

@@ -32,6 +32,6 @@ Fontes: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-git
 
 ## Atualizar a interface
 
-Os arquivos publicados ficam em `docs/`, com Pages configurado para a branch `main` e pasta `/docs`. O adaptador está em `deploy/pages-entry.js`. `docs/pages.js` é seu bundle com as bibliotecas Supabase e fflate; nenhuma chave secreta ou dado real faz parte dele. As licenças ficam no arquivo de comentários do bundle.
+Os arquivos publicados ficam em `docs/`, com Pages configurado para a branch `main` e pasta `/docs`. O adaptador está em `deploy/pages-entry.js`. `docs/pages.js` é seu bundle com as bibliotecas Supabase e fflate; nenhuma chave secreta ou dado real faz parte dele. As licenças ficam em `docs/THIRD_PARTY_LICENSES.txt`.
 
 Depois de editar a interface original em `public/`, execute o empacotamento descrito em `deploy/build-pages.mjs`, valide e envie as alterações para `main`. A versão Python continua disponível como alternativa, mas não é executada no GitHub Pages.
